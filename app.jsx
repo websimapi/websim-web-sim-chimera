@@ -221,74 +221,73 @@ ${p1Files.js}
     columnNumber: 9
   }, this);
 }
-function Header() {
-  const { currentUser, currentMerge } = useStore();
-  const [showSources, setShowSources] = useState(false);
+function HeaderContent({ currentMerge, currentUser, showSources, setShowSources }) {
   const [hasVoted, setHasVoted] = useState(false);
-  const { data: votes } = useQuery(currentMerge ? room.collection("votes_v2").filter({ merge_id: currentMerge.id }) : null);
+  const { data: votes } = useQuery(room.collection("votes_v2").filter({ merge_id: currentMerge.id }));
   useEffect(() => {
     if (currentUser && votes) {
       setHasVoted(votes.some((v) => v.user_id === currentUser.id));
+    } else {
+      setHasVoted(false);
     }
   }, [currentUser, votes]);
   const handleVote = async () => {
-    if (!currentUser || !currentMerge || hasVoted) return;
+    if (!currentUser || hasVoted) return;
     try {
       await room.collection("votes_v2").upsert({
         id: `${currentUser.id}-${currentMerge.id}`,
         merge_id: currentMerge.id
       });
-      setHasVoted(true);
     } catch (error) {
       console.error("Error voting:", error);
     }
   };
-  const sourceProjects = currentMerge?.source_projects || [];
+  const sourceProjects = currentMerge.source_projects || [];
   const voteCount = votes?.length || 0;
   return /* @__PURE__ */ jsxDEV("div", { className: "p-4 bg-gray-700/50 border-b border-gray-600 flex flex-wrap items-center justify-between gap-4", children: [
     /* @__PURE__ */ jsxDEV("div", { children: [
       /* @__PURE__ */ jsxDEV("h1", { className: "text-xl font-bold", children: "Web Sim Chimera" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 224,
+        lineNumber: 223,
         columnNumber: 17
       }, this),
       /* @__PURE__ */ jsxDEV("p", { className: "text-sm text-gray-400", children: [
         "Generation: ",
-        currentMerge?.generation || "N/A"
+        currentMerge.generation || "N/A"
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 225,
+        lineNumber: 224,
         columnNumber: 17
       }, this)
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 223,
+      lineNumber: 222,
       columnNumber: 13
     }, this),
     sourceProjects.length > 0 && /* @__PURE__ */ jsxDEV("div", { className: "text-sm text-gray-300", children: [
       /* @__PURE__ */ jsxDEV("span", { className: "font-semibold", children: "Merged from:" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 229,
+        lineNumber: 228,
         columnNumber: 21
       }, this),
       /* @__PURE__ */ jsxDEV("a", { href: `https://websim.com/p/${sourceProjects[0].id}`, target: "_blank", rel: "noopener noreferrer", className: "ml-2 text-blue-400 hover:underline", children: sourceProjects[0].title }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 230,
+        lineNumber: 229,
         columnNumber: 21
       }, this),
       /* @__PURE__ */ jsxDEV("span", { className: "mx-2", children: "&" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 231,
+        lineNumber: 230,
         columnNumber: 21
       }, this),
       /* @__PURE__ */ jsxDEV("a", { href: `https://websim.com/p/${sourceProjects[1].id}`, target: "_blank", rel: "noopener noreferrer", className: "text-blue-400 hover:underline", children: sourceProjects[1].title }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 232,
+        lineNumber: 231,
         columnNumber: 21
       }, this)
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 228,
+      lineNumber: 227,
       columnNumber: 17
     }, this),
     /* @__PURE__ */ jsxDEV("div", { className: "flex items-center gap-4", children: [
@@ -301,7 +300,7 @@ function Header() {
           children: [
             /* @__PURE__ */ jsxDEV("i", { className: "fa-solid fa-code mr-2" }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 241,
+              lineNumber: 240,
               columnNumber: 21
             }, this),
             " View Code"
@@ -311,7 +310,7 @@ function Header() {
         true,
         {
           fileName: "<stdin>",
-          lineNumber: 236,
+          lineNumber: 235,
           columnNumber: 18
         },
         this
@@ -320,17 +319,17 @@ function Header() {
         "button",
         {
           onClick: handleVote,
-          disabled: hasVoted || !currentUser || !currentMerge,
+          disabled: hasVoted || !currentUser,
           className: "px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-md text-sm transition-colors disabled:bg-gray-500 disabled:cursor-not-allowed flex items-center gap-2",
           children: [
             /* @__PURE__ */ jsxDEV("i", { className: `fa-solid fa-star ${hasVoted ? "text-yellow-400" : ""}` }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 248,
+              lineNumber: 247,
               columnNumber: 21
             }, this),
             /* @__PURE__ */ jsxDEV("span", { children: voteCount }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 249,
+              lineNumber: 248,
               columnNumber: 21
             }, this)
           ]
@@ -339,25 +338,114 @@ function Header() {
         true,
         {
           fileName: "<stdin>",
-          lineNumber: 243,
+          lineNumber: 242,
           columnNumber: 17
         },
         this
       )
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 235,
+      lineNumber: 234,
       columnNumber: 13
     }, this),
-    showSources && currentMerge && /* @__PURE__ */ jsxDEV(SourceCodeModal, { merge: currentMerge, onClose: () => setShowSources(false) }, void 0, false, {
+    showSources && /* @__PURE__ */ jsxDEV(SourceCodeModal, { merge: currentMerge, onClose: () => setShowSources(false) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 252,
-      columnNumber: 45
+      lineNumber: 251,
+      columnNumber: 29
     }, this)
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 222,
+    lineNumber: 221,
     columnNumber: 9
+  }, this);
+}
+function Header() {
+  const { currentUser, currentMerge } = useStore();
+  const [showSources, setShowSources] = useState(false);
+  if (!currentMerge) {
+    return /* @__PURE__ */ jsxDEV("div", { className: "p-4 bg-gray-700/50 border-b border-gray-600 flex flex-wrap items-center justify-between gap-4", children: [
+      /* @__PURE__ */ jsxDEV("div", { children: [
+        /* @__PURE__ */ jsxDEV("h1", { className: "text-xl font-bold", children: "Web Sim Chimera" }, void 0, false, {
+          fileName: "<stdin>",
+          lineNumber: 265,
+          columnNumber: 21
+        }, this),
+        /* @__PURE__ */ jsxDEV("p", { className: "text-sm text-gray-400", children: "Generation: N/A" }, void 0, false, {
+          fileName: "<stdin>",
+          lineNumber: 266,
+          columnNumber: 21
+        }, this)
+      ] }, void 0, true, {
+        fileName: "<stdin>",
+        lineNumber: 264,
+        columnNumber: 17
+      }, this),
+      /* @__PURE__ */ jsxDEV("div", { className: "flex items-center gap-4", children: [
+        /* @__PURE__ */ jsxDEV(
+          "button",
+          {
+            className: "px-4 py-2 bg-gray-600 rounded-md text-sm opacity-50 cursor-not-allowed",
+            disabled: true,
+            children: [
+              /* @__PURE__ */ jsxDEV("i", { className: "fa-solid fa-code mr-2" }, void 0, false, {
+                fileName: "<stdin>",
+                lineNumber: 273,
+                columnNumber: 25
+              }, this),
+              " View Code"
+            ]
+          },
+          void 0,
+          true,
+          {
+            fileName: "<stdin>",
+            lineNumber: 269,
+            columnNumber: 22
+          },
+          this
+        ),
+        /* @__PURE__ */ jsxDEV(
+          "button",
+          {
+            disabled: true,
+            className: "px-4 py-2 bg-gray-500 rounded-md text-sm cursor-not-allowed flex items-center gap-2",
+            children: [
+              /* @__PURE__ */ jsxDEV("i", { className: "fa-solid fa-star" }, void 0, false, {
+                fileName: "<stdin>",
+                lineNumber: 279,
+                columnNumber: 25
+              }, this),
+              /* @__PURE__ */ jsxDEV("span", { children: "0" }, void 0, false, {
+                fileName: "<stdin>",
+                lineNumber: 280,
+                columnNumber: 25
+              }, this)
+            ]
+          },
+          void 0,
+          true,
+          {
+            fileName: "<stdin>",
+            lineNumber: 275,
+            columnNumber: 21
+          },
+          this
+        )
+      ] }, void 0, true, {
+        fileName: "<stdin>",
+        lineNumber: 268,
+        columnNumber: 17
+      }, this)
+    ] }, void 0, true, {
+      fileName: "<stdin>",
+      lineNumber: 263,
+      columnNumber: 13
+    }, this);
+  }
+  return /* @__PURE__ */ jsxDEV(HeaderContent, { currentMerge, currentUser, showSources, setShowSources }, void 0, false, {
+    fileName: "<stdin>",
+    lineNumber: 287,
+    columnNumber: 12
   }, this);
 }
 function LeaderboardSidebar() {
@@ -382,16 +470,16 @@ function LeaderboardSidebar() {
   return /* @__PURE__ */ jsxDEV("aside", { className: "w-full md:w-80 lg:w-96 flex-shrink-0 bg-gray-800 rounded-lg shadow-xl p-4 flex flex-col", children: [
     /* @__PURE__ */ jsxDEV("h2", { className: "text-lg font-bold border-b border-gray-600 pb-2 mb-4", children: "Top Merges" }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 281,
+      lineNumber: 314,
       columnNumber: 13
     }, this),
     loading && /* @__PURE__ */ jsxDEV("div", { className: "text-center p-4", children: /* @__PURE__ */ jsxDEV(PulseLoader, { color: "#4A90E2", size: 8 }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 282,
+      lineNumber: 315,
       columnNumber: 58
     }, this) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 282,
+      lineNumber: 315,
       columnNumber: 25
     }, this),
     /* @__PURE__ */ jsxDEV("div", { className: "space-y-3 overflow-y-auto", children: leaderboard && leaderboard.map((item, index) => /* @__PURE__ */ jsxDEV("div", { className: "leaderboard-item p-3 border border-gray-700 rounded-md bg-gray-700/50 flex justify-between items-center", children: [
@@ -401,12 +489,12 @@ function LeaderboardSidebar() {
           item.generation
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 287,
+          lineNumber: 320,
           columnNumber: 29
         }, this),
         /* @__PURE__ */ jsxDEV("div", { className: "text-xs text-gray-400 truncate", children: item.source_projects?.map((p) => p.title).join(" + ") }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 288,
+          lineNumber: 321,
           columnNumber: 29
         }, this),
         /* @__PURE__ */ jsxDEV("p", { className: "text-yellow-400 font-semibold", children: [
@@ -414,36 +502,36 @@ function LeaderboardSidebar() {
           " votes"
         ] }, void 0, true, {
           fileName: "<stdin>",
-          lineNumber: 291,
+          lineNumber: 324,
           columnNumber: 29
         }, this)
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 286,
+        lineNumber: 319,
         columnNumber: 25
       }, this),
       /* @__PURE__ */ jsxDEV("button", { onClick: () => handleViewMerge(item.id), className: "ml-2 px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded text-xs transition-colors", children: "View" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 293,
+        lineNumber: 326,
         columnNumber: 25
       }, this)
     ] }, item.id, true, {
       fileName: "<stdin>",
-      lineNumber: 285,
+      lineNumber: 318,
       columnNumber: 21
     }, this)) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 283,
+      lineNumber: 316,
       columnNumber: 13
     }, this),
     showModal && /* @__PURE__ */ jsxDEV(LeaderboardModal, { mergeId: selectedMergeId, onClose: () => setShowModal(false) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 299,
+      lineNumber: 332,
       columnNumber: 27
     }, this)
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 280,
+    lineNumber: 313,
     columnNumber: 9
   }, this);
 }
@@ -456,86 +544,86 @@ function SourceCodeModal({ merge, onClose }) {
         merge.generation
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 311,
+        lineNumber: 344,
         columnNumber: 21
       }, this),
       /* @__PURE__ */ jsxDEV("button", { onClick: onClose, className: "text-gray-400 hover:text-white", children: "\xD7" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 312,
+        lineNumber: 345,
         columnNumber: 21
       }, this)
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 310,
+      lineNumber: 343,
       columnNumber: 17
     }, this),
     /* @__PURE__ */ jsxDEV("div", { children: [
       /* @__PURE__ */ jsxDEV("div", { className: "flex border-b border-gray-600 mb-2", children: [
         /* @__PURE__ */ jsxDEV("button", { className: `tab-button ${activeTab === "html" ? "active" : ""}`, onClick: () => setActiveTab("html"), children: "HTML" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 316,
+          lineNumber: 349,
           columnNumber: 25
         }, this),
         /* @__PURE__ */ jsxDEV("button", { className: `tab-button ${activeTab === "css" ? "active" : ""}`, onClick: () => setActiveTab("css"), children: "CSS" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 317,
+          lineNumber: 350,
           columnNumber: 25
         }, this),
         /* @__PURE__ */ jsxDEV("button", { className: `tab-button ${activeTab === "js" ? "active" : ""}`, onClick: () => setActiveTab("js"), children: "JS" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 318,
+          lineNumber: 351,
           columnNumber: 25
         }, this)
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 315,
+        lineNumber: 348,
         columnNumber: 21
       }, this),
       /* @__PURE__ */ jsxDEV("div", { children: [
         activeTab === "html" && /* @__PURE__ */ jsxDEV("pre", { className: "code-block", children: /* @__PURE__ */ jsxDEV("code", { children: merge.html_code }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 321,
+          lineNumber: 354,
           columnNumber: 78
         }, this) }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 321,
+          lineNumber: 354,
           columnNumber: 50
         }, this),
         activeTab === "css" && /* @__PURE__ */ jsxDEV("pre", { className: "code-block", children: /* @__PURE__ */ jsxDEV("code", { children: merge.css_code }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 322,
+          lineNumber: 355,
           columnNumber: 77
         }, this) }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 322,
+          lineNumber: 355,
           columnNumber: 49
         }, this),
         activeTab === "js" && /* @__PURE__ */ jsxDEV("pre", { className: "code-block", children: /* @__PURE__ */ jsxDEV("code", { children: merge.js_code }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 323,
+          lineNumber: 356,
           columnNumber: 76
         }, this) }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 323,
+          lineNumber: 356,
           columnNumber: 48
         }, this)
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 320,
+        lineNumber: 353,
         columnNumber: 21
       }, this)
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 314,
+      lineNumber: 347,
       columnNumber: 17
     }, this)
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 309,
+    lineNumber: 342,
     columnNumber: 13
   }, this) }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 308,
+    lineNumber: 341,
     columnNumber: 9
   }, this);
 }
@@ -547,11 +635,11 @@ function LeaderboardModal({ mergeId, onClose }) {
   if (loading || !merge) {
     return /* @__PURE__ */ jsxDEV("div", { className: "modal-backdrop", children: /* @__PURE__ */ jsxDEV(PulseLoader, { color: "#4A90E2" }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 338,
+      lineNumber: 371,
       columnNumber: 48
     }, this) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 338,
+      lineNumber: 371,
       columnNumber: 16
     }, this);
   }
@@ -571,35 +659,35 @@ function LeaderboardModal({ mergeId, onClose }) {
         merge.generation
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 355,
+        lineNumber: 388,
         columnNumber: 21
       }, this),
       /* @__PURE__ */ jsxDEV("button", { onClick: onClose, className: "text-2xl text-gray-400 hover:text-white", children: "\xD7" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 356,
+        lineNumber: 389,
         columnNumber: 21
       }, this)
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 354,
+      lineNumber: 387,
       columnNumber: 17
     }, this),
     /* @__PURE__ */ jsxDEV("div", { className: "flex-grow border border-gray-600 rounded-md overflow-hidden", children: /* @__PURE__ */ jsxDEV("iframe", { srcDoc, title: `Preview of Generation ${merge.generation}`, sandbox: "allow-scripts allow-same-origin", className: "w-full h-full border-0" }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 359,
+      lineNumber: 392,
       columnNumber: 22
     }, this) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 358,
+      lineNumber: 391,
       columnNumber: 17
     }, this)
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 353,
+    lineNumber: 386,
     columnNumber: 13
   }, this) }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 352,
+    lineNumber: 385,
     columnNumber: 9
   }, this);
 }
@@ -607,11 +695,11 @@ const root = createRoot(document.getElementById("root"));
 root.render(
   /* @__PURE__ */ jsxDEV(StrictMode, { children: /* @__PURE__ */ jsxDEV(App, {}, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 370,
+    lineNumber: 403,
     columnNumber: 9
   }) }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 369,
+    lineNumber: 402,
     columnNumber: 5
   })
 );
