@@ -34,7 +34,7 @@ function MainContent() {
     };
     mergeLoop();
     return () => clearTimeout(timeoutId);
-  }, [setCurrentMerge, setIsLoading, setLoadingMessage]);
+  }, []);
   const srcDoc = currentMerge ? `
         <html>
             <head>

@@ -7,11 +7,12 @@ import SourceCodeModal from "~/src/components/modals/SourceCodeModal.jsx";
 function HeaderContent({ currentMerge, currentUser }) {
   const [showSources, setShowSources] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
-  const { data: votes } = useQuery(
+  const { data: votesData } = useQuery(
     currentMerge ? room.collection("votes_v2").filter({ merge_id: currentMerge.id }) : null
   );
+  const votes = votesData || [];
   useEffect(() => {
-    if (currentUser && votes) {
+    if (currentUser && votes.length > 0) {
       setHasVoted(votes.some((v) => v.user_id === currentUser.id));
     } else {
       setHasVoted(false);
@@ -34,7 +35,7 @@ function HeaderContent({ currentMerge, currentUser }) {
     /* @__PURE__ */ jsxDEV("div", { children: [
       /* @__PURE__ */ jsxDEV("h1", { className: "text-xl font-bold", children: "Web Sim Chimera" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 41,
+        lineNumber: 42,
         columnNumber: 17
       }, this),
       /* @__PURE__ */ jsxDEV("p", { className: "text-sm text-gray-400", children: [
@@ -42,38 +43,38 @@ function HeaderContent({ currentMerge, currentUser }) {
         currentMerge.generation || "N/A"
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 42,
+        lineNumber: 43,
         columnNumber: 17
       }, this)
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 40,
+      lineNumber: 41,
       columnNumber: 13
     }, this),
     sourceProjects.length > 0 && /* @__PURE__ */ jsxDEV("div", { className: "text-sm text-gray-300", children: [
       /* @__PURE__ */ jsxDEV("span", { className: "font-semibold", children: "Merged from:" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 46,
+        lineNumber: 47,
         columnNumber: 21
       }, this),
       /* @__PURE__ */ jsxDEV("a", { href: `https://websim.com/p/${sourceProjects[0].id}`, target: "_blank", rel: "noopener noreferrer", className: "ml-2 text-blue-400 hover:underline", children: sourceProjects[0].title }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 47,
+        lineNumber: 48,
         columnNumber: 21
       }, this),
       /* @__PURE__ */ jsxDEV("span", { className: "mx-2", children: "&" }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 48,
+        lineNumber: 49,
         columnNumber: 21
       }, this),
       /* @__PURE__ */ jsxDEV("a", { href: `https://websim.com/p/${sourceProjects[1].id}`, target: "_blank", rel: "noopener noreferrer", className: "text-blue-400 hover:underline", children: sourceProjects[1].title }, void 0, false, {
         fileName: "<stdin>",
-        lineNumber: 49,
+        lineNumber: 50,
         columnNumber: 21
       }, this)
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 45,
+      lineNumber: 46,
       columnNumber: 17
     }, this),
     /* @__PURE__ */ jsxDEV("div", { className: "flex items-center gap-4", children: [
@@ -86,7 +87,7 @@ function HeaderContent({ currentMerge, currentUser }) {
           children: [
             /* @__PURE__ */ jsxDEV("i", { className: "fa-solid fa-code mr-2" }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 58,
+              lineNumber: 59,
               columnNumber: 21
             }, this),
             " View Code"
@@ -96,7 +97,7 @@ function HeaderContent({ currentMerge, currentUser }) {
         true,
         {
           fileName: "<stdin>",
-          lineNumber: 53,
+          lineNumber: 54,
           columnNumber: 18
         },
         this
@@ -110,12 +111,12 @@ function HeaderContent({ currentMerge, currentUser }) {
           children: [
             /* @__PURE__ */ jsxDEV("i", { className: `fa-solid fa-star ${hasVoted ? "text-yellow-400" : ""}` }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 65,
+              lineNumber: 66,
               columnNumber: 21
             }, this),
             /* @__PURE__ */ jsxDEV("span", { children: voteCount }, void 0, false, {
               fileName: "<stdin>",
-              lineNumber: 66,
+              lineNumber: 67,
               columnNumber: 21
             }, this)
           ]
@@ -124,24 +125,24 @@ function HeaderContent({ currentMerge, currentUser }) {
         true,
         {
           fileName: "<stdin>",
-          lineNumber: 60,
+          lineNumber: 61,
           columnNumber: 17
         },
         this
       )
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 52,
+      lineNumber: 53,
       columnNumber: 13
     }, this),
     showSources && /* @__PURE__ */ jsxDEV(SourceCodeModal, { merge: currentMerge, onClose: () => setShowSources(false) }, void 0, false, {
       fileName: "<stdin>",
-      lineNumber: 69,
+      lineNumber: 70,
       columnNumber: 29
     }, this)
   ] }, void 0, true, {
     fileName: "<stdin>",
-    lineNumber: 39,
+    lineNumber: 40,
     columnNumber: 9
   }, this);
 }
@@ -152,17 +153,17 @@ function Header() {
       /* @__PURE__ */ jsxDEV("div", { children: [
         /* @__PURE__ */ jsxDEV("h1", { className: "text-xl font-bold", children: "Web Sim Chimera" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 81,
+          lineNumber: 82,
           columnNumber: 21
         }, this),
         /* @__PURE__ */ jsxDEV("p", { className: "text-sm text-gray-400", children: "Generation: N/A" }, void 0, false, {
           fileName: "<stdin>",
-          lineNumber: 82,
+          lineNumber: 83,
           columnNumber: 21
         }, this)
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 80,
+        lineNumber: 81,
         columnNumber: 17
       }, this),
       /* @__PURE__ */ jsxDEV("div", { className: "flex items-center gap-4", children: [
@@ -174,7 +175,7 @@ function Header() {
             children: [
               /* @__PURE__ */ jsxDEV("i", { className: "fa-solid fa-code mr-2" }, void 0, false, {
                 fileName: "<stdin>",
-                lineNumber: 89,
+                lineNumber: 90,
                 columnNumber: 25
               }, this),
               " View Code"
@@ -184,7 +185,7 @@ function Header() {
           true,
           {
             fileName: "<stdin>",
-            lineNumber: 85,
+            lineNumber: 86,
             columnNumber: 22
           },
           this
@@ -197,12 +198,12 @@ function Header() {
             children: [
               /* @__PURE__ */ jsxDEV("i", { className: "fa-solid fa-star" }, void 0, false, {
                 fileName: "<stdin>",
-                lineNumber: 95,
+                lineNumber: 96,
                 columnNumber: 25
               }, this),
               /* @__PURE__ */ jsxDEV("span", { children: "0" }, void 0, false, {
                 fileName: "<stdin>",
-                lineNumber: 96,
+                lineNumber: 97,
                 columnNumber: 25
               }, this)
             ]
@@ -211,25 +212,25 @@ function Header() {
           true,
           {
             fileName: "<stdin>",
-            lineNumber: 91,
+            lineNumber: 92,
             columnNumber: 21
           },
           this
         )
       ] }, void 0, true, {
         fileName: "<stdin>",
-        lineNumber: 84,
+        lineNumber: 85,
         columnNumber: 17
       }, this)
     ] }, void 0, true, {
       fileName: "<stdin>",
-      lineNumber: 79,
+      lineNumber: 80,
       columnNumber: 13
     }, this);
   }
   return /* @__PURE__ */ jsxDEV(HeaderContent, { currentMerge, currentUser }, void 0, false, {
     fileName: "<stdin>",
-    lineNumber: 103,
+    lineNumber: 104,
     columnNumber: 12
   }, this);
 }
