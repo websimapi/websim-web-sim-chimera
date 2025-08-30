@@ -1,0 +1,19 @@
+{
+  "database": {
+    "schema": {
+      "merges_v2": {
+        "id": { "type": "uuid", "description": "Unique ID for the merge" },
+        "generation": { "type": "integer", "description": "The generation number of this merge" },
+        "source_projects": { "type": "jsonb", "description": "Info about the projects used for the merge" },
+        "html_code": { "type": "text", "description": "The generated HTML code" },
+        "css_code": { "type": "text", "description": "The generated CSS code" },
+        "js_code": { "type": "text", "description": "The generated JS code" }
+      },
+      "votes_v2": {
+        "id": { "type": "text", "description": "user_id + merge_id for uniqueness" },
+        "merge_id": { "type": "uuid", "description": "The ID of the merge being voted on" }
+      }
+    }
+  }
+}
+
